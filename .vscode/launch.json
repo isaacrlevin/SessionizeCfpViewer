@@ -1,0 +1,63 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": ".NET Core Launch (web)",
+			"type": "coreclr",
+			"request": "launch",
+			"preLaunchTask": "build",
+			"program": "${workspaceFolder}/src/SessionizeCfpViewer/bin/Debug/net10.0/SessionizeCfpViewer.dll",
+			"args": [],
+			"cwd": "${workspaceFolder}/src/SessionizeCfpViewer",
+			"stopAtEntry": false,
+			"serverReadyAction": {
+				"action": "openExternally",
+				"pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+			},
+			"env": {
+				"ASPNETCORE_ENVIRONMENT": "Development"
+			},
+			"sourceFileMap": {
+				"/Views": "${workspaceFolder}/Views"
+			}
+		},
+		{
+			"name": ".NET Core Launch (web - https)",
+			"type": "coreclr",
+			"request": "launch",
+			"preLaunchTask": "build",
+			"program": "${workspaceFolder}/src/SessionizeCfpViewer/bin/Debug/net10.0/SessionizeCfpViewer.dll",
+			"args": [],
+			"cwd": "${workspaceFolder}/src/SessionizeCfpViewer",
+			"stopAtEntry": false,
+			"serverReadyAction": {
+				"action": "openExternally",
+				"pattern": "\\bNow listening on:\\s+(https://\\S+)",
+				"uriFormat": "%s"
+			},
+			"env": {
+				"ASPNETCORE_ENVIRONMENT": "Development",
+				"ASPNETCORE_URLS": "https://localhost:5001;http://localhost:5000"
+			},
+			"sourceFileMap": {
+				"/Views": "${workspaceFolder}/Views"
+			}
+		},
+		{
+			"name": ".NET Core Attach",
+			"type": "coreclr",
+			"request": "attach"
+		},
+		{
+			"name": ".NET Core Launch (console)",
+			"type": "coreclr",
+			"request": "launch",
+			"preLaunchTask": "build",
+			"program": "${workspaceFolder}/src/SessionizeCfpViewer/bin/Debug/net10.0/SessionizeCfpViewer.dll",
+			"args": [],
+			"cwd": "${workspaceFolder}/src/SessionizeCfpViewer",
+			"console": "internalConsole",
+			"stopAtEntry": false
+		}
+	]
+}

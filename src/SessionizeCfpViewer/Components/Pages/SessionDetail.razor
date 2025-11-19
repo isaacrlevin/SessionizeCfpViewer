@@ -1,0 +1,256 @@
+@page "/session/{id}"
+@inject CfpDataService DataService
+@inject NavigationManager Navigation
+
+<PageTitle>@(session?.Name ?? "Session Details")</PageTitle>
+
+<div class="container py-4">
+    @if (isLoading)
+    {
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Loading session details...</p>
+        </div>
+    }
+    else if (session == null)
+    {
+        <div class="alert alert-warning">
+            <h4>Session Not Found</h4>
+            <p>The requested session could not be found.</p>
+            <a href="/" class="btn btn-primary">Back to List</a>
+        </div>
+    }
+    else
+    {
+        <div class="mb-3">
+            <a href="/" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Back to List
+            </a>
+        </div>
+
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h2 class="mb-0">@session.Name</h2>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            @if (session.IsOnline)
+                            {
+                                <span class="badge bg-info fs-6">Online</span>
+                            }
+                            @if (!session.IsOnline)
+                            {
+                                <span class="badge bg-success fs-6">In-Person</span>
+                            }
+                            @if (session.IsOnline && !string.IsNullOrEmpty(session.LocationFull))
+                            {
+                                <span class="badge bg-warning fs-6">Hybrid</span>
+                            }
+                            @if (!session.ExpensesConferenceFee)
+                            {
+                                <span class="badge bg-primary fs-6">Free</span>
+                            }
+                            @if (session.CfpStartDate.HasValue && session.CfpEndDate.HasValue && DateTime.Now >= session.CfpStartDate.Value && DateTime.Now <= session.CfpEndDate.Value)
+                            {
+                                <span class="badge bg-success fs-6">🔓 CFP Open</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger fs-6">🔒 CFP Closed</span>
+                            }
+                            @if (session.ExpensesTravel)
+                            {
+                                <span class="badge bg-info fs-6"><i class="bi bi-airplane"></i> Travel Covered</span>
+                            }
+                            @if (session.ExpensesAccommodation)
+                            {
+                                <span class="badge bg-info fs-6"><i class="bi bi-building"></i> Accommodation Covered</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                @if (!string.IsNullOrEmpty(session.Description))
+                {
+                    <div class="mb-4">
+                        <h5>Description</h5>
+                        <p class="text-muted">@session.Description</p>
+                    </div>
+                }
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h5>Location Details</h5>
+                        <table class="table table-sm">
+                            <tbody>
+                                @if (!string.IsNullOrEmpty(session.LocationFull))
+                                {
+                                    <tr>
+                                        <th style="width: 40%;">Location:</th>
+                                        <td>@session.LocationFull</td>
+                                    </tr>
+                                }
+                                @if (!string.IsNullOrEmpty(session.City))
+                                {
+                                    <tr>
+                                        <th>City:</th>
+                                        <td>@session.City</td>
+                                    </tr>
+                                }
+                                @if (!string.IsNullOrEmpty(session.Country))
+                                {
+                                    <tr>
+                                        <th>Country:</th>
+                                        <td>@session.Country @(!string.IsNullOrEmpty(session.CountryCode) ? $"({session.CountryCode})" : "")</td>
+                                    </tr>
+                                }
+                                @if (!string.IsNullOrEmpty(session.TimezoneIana))
+                                {
+                                    <tr>
+                                        <th>Timezone:</th>
+                                        <td>
+                                            @session.TimezoneIana
+                                            @if (!string.IsNullOrEmpty(session.TimezoneWindows))
+                                            {
+                                                <span class="text-muted">(@session.TimezoneWindows)</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="col-md-6">
+                        <h5>Important Dates</h5>
+                        <table class="table table-sm">
+                            <tbody>
+                                @if (session.CfpStartDate.HasValue)
+                                {
+                                    <tr>
+                                        <th style="width: 40%;">CFP Opens:</th>
+                                        <td>@session.CfpStartDate.Value.ToString("MMMM dd, yyyy")</td>
+                                    </tr>
+                                }
+                                @if (session.CfpEndDate.HasValue)
+                                {
+                                    <tr>
+                                        <th>CFP Closes:</th>
+                                        <td>
+                                            <strong>@session.CfpEndDate.Value.ToString("MMMM dd, yyyy")</strong>
+                                            @if (session.CfpEndDate.Value > DateTime.Now)
+                                            {
+                                                var daysRemaining = (session.CfpEndDate.Value - DateTime.Now).Days;
+                                                <span class="badge bg-warning ms-2">@daysRemaining days remaining</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                                @if (session.EventStartDate.HasValue)
+                                {
+                                    <tr>
+                                        <th>Event Starts:</th>
+                                        <td>@session.EventStartDate.Value.ToString("MMMM dd, yyyy")</td>
+                                    </tr>
+                                }
+                                @if (session.EventEndDate.HasValue)
+                                {
+                                    <tr>
+                                        <th>Event Ends:</th>
+                                        <td>@session.EventEndDate.Value.ToString("MMMM dd, yyyy")</td>
+                                    </tr>
+                                }
+                                @if (session.LastUpdated.HasValue)
+                                {
+                                    <tr>
+                                        <th>Last Updated:</th>
+                                        <td>@session.LastUpdated.Value.ToString("MMMM dd, yyyy HH:mm") UTC</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                @if (!string.IsNullOrEmpty(session.Topics))
+                {
+                    <div class="mb-3">
+                        <h5>Topics</h5>
+                        <p class="text-muted">@session.Topics</p>
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(session.SessionFormats))
+                {
+                    <div class="mb-3">
+                        <h5>Session Formats</h5>
+                        <p class="text-muted">@session.SessionFormats</p>
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(session.Tags))
+                {
+                    <div class="mb-3">
+                        <h5>Tags</h5>
+                        <p class="text-muted">@session.Tags</p>
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(session.Categories))
+                {
+                    <div class="mb-3">
+                        <h5>Categories</h5>
+                        <p class="text-muted">@session.Categories</p>
+                    </div>
+                }
+
+                <div class="mt-4">
+                    @if (!string.IsNullOrEmpty(session.Website))
+                    {
+                        <a href="@session.Website" target="_blank" class="btn btn-primary me-2">
+                            Visit Session Site <i class="bi bi-box-arrow-up-right"></i>
+                        </a>
+                    }
+                    @if (!string.IsNullOrEmpty(session.CfpLink))
+                    {
+                        <a href="@session.CfpLink" target="_blank" class="btn btn-info me-2">
+                            View CFP <i class="bi bi-box-arrow-up-right"></i>
+                        </a>
+                    }
+                    <a href="/" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> Back to List
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Id { get; set; } = string.Empty;
+
+    private CfpSessionFlat? session;
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadSession();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await LoadSession();
+    }
+
+    private async Task LoadSession()
+    {
+        isLoading = true;
+        session = await DataService.GetSessionByIdAsync(Id);
+        isLoading = false;
+    }
+}
