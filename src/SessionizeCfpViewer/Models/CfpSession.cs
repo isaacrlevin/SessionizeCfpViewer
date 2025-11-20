@@ -6,21 +6,18 @@ namespace SessionizeCfpViewer.Models;
 
 public class CfpSession
 {
-    [Key]
-    [JsonPropertyName("id")]
-    public int Id { get; set; }
     [JsonPropertyName("eventId")]
     public int EventId { get; set; }
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public string? Name { get; set; }
     [JsonPropertyName("organizer")]
-    public string Organizer { get; set; }
+    public string? Organizer { get; set; }
     [JsonPropertyName("website")]
-    public string Website { get; set; }
+    public string? Website { get; set; }
     [JsonPropertyName("cfpLink")]
-    public string CfpLink { get; set; }
+    public string? CfpLink { get; set; }
 
-    public string Description { get; set; }
+    public string? Description { get; set; }
     [JsonPropertyName("isTest")]
     public bool IsTest { get; set; }
     [JsonPropertyName("isOnline")]
@@ -28,37 +25,37 @@ public class CfpSession
     [JsonPropertyName("isUserGroup")]
     public bool IsUserGroup { get; set; }
     [JsonPropertyName("expensesCovered")]
-    public ExpensesCovered ExpensesCovered { get; set; }
+    public ExpensesCovered? ExpensesCovered { get; set; }
     [JsonPropertyName("eventDates")]
-    public EventDates EventDates { get; set; }
+    public EventDates? EventDates { get; set; }
     [JsonPropertyName("cfpDates")]
-    public CfpDates CfpDates { get; set; }
+    public CfpDates? CfpDates { get; set; }
     [JsonPropertyName("timezone")]
-    public TimeZoneEntity Timezone { get; set; } // Changed type for assignment compatibility
+    public TimeZoneEntity? Timezone { get; set; } // Changed type for assignment compatibility
     [JsonPropertyName("location")]
-    public Location Location { get; set; }
+    public Location? Location { get; set; }
     [JsonPropertyName("links")]
-    public Links Links { get; set; }
+    public Links? Links { get; set; }
     [JsonPropertyName("country")]
-    public string Country { get; set; }
+    public string? Country { get; set; }
     [JsonPropertyName("countryCode")]
-    public string CountryCode { get; set; }
+    public string? CountryCode { get; set; }
     [JsonPropertyName("city")]
-    public string City { get; set; }
+    public string? City { get; set; }
     [JsonPropertyName("tags")]
-    public string Tags { get; set; }
+    public string? Tags { get; set; }
     [JsonPropertyName("topics")]
-    public string Topics { get; set; }
+    public string? Topics { get; set; }
     [JsonPropertyName("sessionFormats")]
-    public string SessionFormats { get; set; }
+    public string? SessionFormats { get; set; }
     [JsonPropertyName("categories")]
-    public string Categories { get; set; }
+    public string? Categories { get; set; }
     [JsonPropertyName("isPaid")]
     public bool IsPaid { get; set; }
     [JsonPropertyName("lastUpdated")]
     public DateTime? LastUpdated { get; set; }
     [JsonPropertyName("timezoneJson")]
-    public TimezoneInfo TimezoneJson { get; set; }
+    public TimezoneInfo? TimezoneJson { get; set; }
     [JsonPropertyName("timeZoneId")]
     public int? TimeZoneId { get; set; }
 
@@ -74,10 +71,10 @@ public class CfpSession
     // Computed properties for UI logic
     public bool IsInPerson => !IsOnline;
     public bool IsHybrid => IsOnline && Location != null && !string.IsNullOrEmpty(Location.Full);
-    public bool IsFree => ExpensesCovered != null && ExpensesCovered.ConferenceFee == false;
+    public bool IsFree => ExpensesCovered != null && ExpensesCovered.ConferenceFee;
 
     // Convenience property for Razor and search usage
-    public string LocationString => Location?.Full;
+    public string? LocationString => Location?.Full;
 }
 
 public class TimeZoneEntity
@@ -111,11 +108,11 @@ public class ExpensesCovered
 public class EventDates
 {
     [JsonPropertyName("start")]
-    public string Start { get; set; }
+    public string? Start { get; set; }
     [JsonPropertyName("end")]
-    public string End { get; set; }
+    public string? End { get; set; }
     [JsonPropertyName("allDates")]
-    public string[] AllDates { get; set; }
+    public string[]? AllDates { get; set; }
 }
 
 public class CfpDates
@@ -141,28 +138,28 @@ public class Timezone
 public class Location
 {
     [JsonPropertyName("full")]
-    public string Full { get; set; }
+    public string? Full { get; set; }
     [JsonPropertyName("city")]
-    public string City { get; set; }
+    public string? City { get; set; }
     [JsonPropertyName("state")]
-    public string State { get; set; }
+    public string? State { get; set; }
     [JsonPropertyName("country")]
-    public string Country { get; set; }
+    public string? Country { get; set; }
     [JsonPropertyName("coordinates")]
-    public string Coordinates { get; set; }
+    public string? Coordinates { get; set; }
 
     // Convenience ToString for search
-    public override string ToString() => Full;
+    public override string? ToString() => Full;
 }
 
 public class Links
 {
     [JsonPropertyName("twitter")]
-    public string Twitter { get; set; }
+    public string? Twitter { get; set; }
     [JsonPropertyName("linkedIn")]
-    public string LinkedIn { get; set; }
+    public string? LinkedIn { get; set; }
     [JsonPropertyName("facebook")]
-    public string Facebook { get; set; }
+    public string? Facebook { get; set; }
     [JsonPropertyName("instagram")]
-    public string Instagram { get; set; }
+    public string? Instagram { get; set; }
 }

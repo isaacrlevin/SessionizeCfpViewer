@@ -46,11 +46,11 @@
                             {
                                 <span class="badge bg-success fs-6">In-Person</span>
                             }
-                            @if (session.IsOnline && !string.IsNullOrEmpty(session.LocationFull))
+                            @if (session.IsOnline && !string.IsNullOrEmpty(session.Location.Full))
                             {
                                 <span class="badge bg-warning fs-6">Hybrid</span>
                             }
-                            @if (!session.ExpensesConferenceFee)
+                            @if (!session.ExpensesCovered.ConferenceFee)
                             {
                                 <span class="badge bg-primary fs-6">Free</span>
                             }
@@ -62,11 +62,11 @@
                             {
                                 <span class="badge bg-danger fs-6">🔒 CFP Closed</span>
                             }
-                            @if (session.ExpensesTravel)
+                            @if (session.ExpensesCovered.Travel)
                             {
                                 <span class="badge bg-info fs-6"><i class="bi bi-airplane"></i> Travel Covered</span>
                             }
-                            @if (session.ExpensesAccommodation)
+                            @if (session.ExpensesCovered.Accommodation)
                             {
                                 <span class="badge bg-info fs-6"><i class="bi bi-building"></i> Accommodation Covered</span>
                             }
@@ -87,11 +87,11 @@
                         <h5>Location Details</h5>
                         <table class="table table-sm">
                             <tbody>
-                                @if (!string.IsNullOrEmpty(session.LocationFull))
+                                @if (!string.IsNullOrEmpty(session.Location.Full))
                                 {
                                     <tr>
                                         <th style="width: 40%;">Location:</th>
-                                        <td>@session.LocationFull</td>
+                                        <td>@session.Location.Full</td>
                                     </tr>
                                 }
                                 @if (!string.IsNullOrEmpty(session.City))
@@ -108,15 +108,15 @@
                                         <td>@session.Country @(!string.IsNullOrEmpty(session.CountryCode) ? $"({session.CountryCode})" : "")</td>
                                     </tr>
                                 }
-                                @if (!string.IsNullOrEmpty(session.TimezoneIana))
+                                @if (!string.IsNullOrEmpty(session.Timezone.Iana))
                                 {
                                     <tr>
                                         <th>Timezone:</th>
                                         <td>
-                                            @session.TimezoneIana
-                                            @if (!string.IsNullOrEmpty(session.TimezoneWindows))
+                                            @session.Timezone.Iana
+                                            @if (!string.IsNullOrEmpty(session.Timezone.Windows))
                                             {
-                                                <span class="text-muted">(@session.TimezoneWindows)</span>
+                                                <span class="text-muted">(@session.Timezone.Windows)</span>
                                             }
                                         </td>
                                     </tr>
@@ -234,7 +234,7 @@
     [Parameter]
     public string Id { get; set; } = string.Empty;
 
-    private CfpSessionFlat? session;
+    private CfpSession? session;
     private bool isLoading = true;
 
     protected override async Task OnInitializedAsync()

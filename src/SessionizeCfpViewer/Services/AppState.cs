@@ -7,14 +7,14 @@ public class AppState
     private readonly ILogger<AppState> _logger;
     private DateTime? _lastRefreshUtc;
     private readonly TimeSpan _cacheDuration = TimeSpan.FromMinutes(15);
-    private List<CfpSessionFlat> _sessions = new();
+    private List<CfpSession> _sessions = new();
 
     public AppState(ILogger<AppState> logger)
     {
         _logger = logger;
     }
 
-    public IReadOnlyList<CfpSessionFlat> Sessions => _sessions;
+    public IReadOnlyList<CfpSession> Sessions => _sessions;
     public DateTime? LastRefreshUtc => _lastRefreshUtc;
     public bool IsInitialized => _lastRefreshUtc.HasValue;
 

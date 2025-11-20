@@ -6,383 +6,384 @@
 <PageTitle>Sessionize CFPs</PageTitle>
 
 <div class="container-fluid py-4">
-    <div class="row mb-4">
-        <div class="col">
-            <h1>Sessionize Call for Papers</h1>
-        </div>
-        <div class="col-auto">
-            <button class="btn btn-primary" @onclick="RefreshData" disabled="@isLoading">
-                @if (isLoading)
-                {
-                    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                }
-                Refresh from API
-            </button>
-        </div>
-    </div>
+	<div class="row mb-4">
+		<div class="col">
+			<h1>Sessionize Call for Papers</h1>
+		</div>
+		<div class="col-auto">
+			<button class="btn btn-primary" @onclick="RefreshData" disabled="@isLoading">
+				@if (isLoading)
+				{
+					<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+				}
+				Refresh from API
+			</button>
+		</div>
+	</div>
 
-    @if (errorMessage != null)
-    {
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            @errorMessage
-            <button type="button" class="btn-close" @onclick="@(() => errorMessage = null)"></button>
-        </div>
-    }
+	@if (errorMessage != null)
+	{
+		<div class="alert alert-danger alert-dismissible fade show" role="alert">
+			@errorMessage
+			<button type="button" class="btn-close" @onclick="@(() => errorMessage = null)"></button>
+		</div>
+	}
 
-    <div class="card mb-4">
-        <div class="card-body">
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <label for="searchInput" class="form-label">Search</label>
-                    <input type="text" class="form-control" id="searchInput"
-                           @bind="searchTerm" @bind:event="oninput"
-                           @onkeyup="OnSearchChanged"
-                           placeholder="Search by name, location, topics, tags..." />
-                </div>
-                <div class="col-md-3">
-                    <label for="sortSelect" class="form-label">Sort By</label>
-                    <select class="form-select" id="sortSelect" @bind="sortBy" @bind:after="LoadSessions">
-                        <option value="cfpEndDate">CFP End Date</option>
-                        <option value="cfpStartDate">CFP Start Date</option>
-                        <option value="eventStartDate">Event Start Date</option>
-                        <option value="name">Name</option>
-                        <option value="country">Country</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label d-block">Options</label>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="openOnlyCheck"
-                               @bind="openOnly" @bind:after="LoadSessions" />
-                        <label class="form-check-label" for="openOnlyCheck">
-                            Open CFPs Only
-                        </label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="ascendingCheck"
-                               @bind="ascending" @bind:after="LoadSessions" />
-                        <label class="form-check-label" for="ascendingCheck">
-                            Ascending
-                        </label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="travelCheck"
-                               @bind="filterTravel" @bind:after="LoadSessions" />
-                        <label class="form-check-label" for="travelCheck">
-                            Travel Covered
-                        </label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="accommodationCheck"
-                               @bind="filterAccommodation" @bind:after="LoadSessions" />
-                        <label class="form-check-label" for="accommodationCheck">
-                            Accommodation Covered
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="card mb-4">
+		<div class="card-body">
+			<div class="row g-3">
+				<div class="col-md-6">
+					<label for="searchInput" class="form-label">Search</label>
+					<input type="text" class="form-control" id="searchInput"
+						   @bind="searchTerm" @bind:event="oninput"
+						   @onkeyup="OnSearchChanged"
+						   placeholder="Search by name, location, topics, tags..." />
+				</div>
+				<div class="col-md-3">
+					<label for="sortSelect" class="form-label">Sort By</label>
+					<select class="form-select" id="sortSelect" @bind="sortBy" @bind:after="LoadSessions">
+						<option value="cfpEndDate">CFP End Date</option>
+						<option value="cfpStartDate">CFP Start Date</option>
+						<option value="eventStartDate">Event Start Date</option>
+						<option value="name">Name</option>
+						<option value="country">Country</option>
+					</select>
+				</div>
+				<div class="col-md-3">
+					<label class="form-label d-block">Options</label>
+					<div class="form-check form-check-inline">
+						<input class="form-check-input" type="checkbox" id="openOnlyCheck"
+							   @bind="openOnly" @bind:after="LoadSessions" />
+						<label class="form-check-label" for="openOnlyCheck">
+							Open CFPs Only
+						</label>
+					</div>
+					<div class="form-check form-check-inline">
+						<input class="form-check-input" type="checkbox" id="ascendingCheck"
+							   @bind="ascending" @bind:after="LoadSessions" />
+						<label class="form-check-label" for="ascendingCheck">
+							Ascending
+						</label>
+					</div>
+					<div class="form-check form-check-inline">
+						<input class="form-check-input" type="checkbox" id="travelCheck"
+							   @bind="filterTravel" @bind:after="LoadSessions" />
+						<label class="form-check-label" for="travelCheck">
+							Travel Covered
+						</label>
+					</div>
+					<div class="form-check form-check-inline">
+						<input class="form-check-input" type="checkbox" id="accommodationCheck"
+							   @bind="filterAccommodation" @bind:after="LoadSessions" />
+						<label class="form-check-label" for="accommodationCheck">
+							Accommodation Covered
+						</label>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-    <div class="row mb-3">
-        <div class="col-md-3">
-            <label for="countrySelect" class="form-label">Country</label>
-            <select class="form-select" id="countrySelect" @bind="selectedCountry" @bind:after="LoadSessions">
-                <option value="">All Countries</option>
-                @foreach (var country in countries)
-                {
-                    <option value="@country">@country</option>
-                }
-            </select>
-        </div>
-        <div class="col-md-9 d-flex align-items-end justify-content-end">
-            <nav>
-                <ul class="pagination mb-0">
-                    <li class="page-item @(currentPage == 1 ? "disabled" : "")">
-                        <button class="page-link" @onclick="PreviousPage">Previous</button>
-                    </li>
-                    <li class="page-item disabled">
-                        <span class="page-link">Page @currentPage of @totalPages</span>
-                    </li>
-                    <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
-                        <button class="page-link" @onclick="NextPage">Next</button>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-    </div>
+	<div class="row mb-3">
+		<div class="col-md-3">
+			<label for="countrySelect" class="form-label">Country</label>
+			<select class="form-select" id="countrySelect" @bind="selectedCountry" @bind:after="LoadSessions">
+				<option value="">All Countries</option>
+				@foreach (var country in countries)
+				{
+					<option value="@country">@country</option>
+				}
+			</select>
+		</div>
+		<div class="col-md-9 d-flex align-items-end justify-content-end">
+			<nav>
+				<ul class="pagination mb-0">
+					<li class="page-item @(currentPage == 1 ? "disabled" : "")">
+						<button class="page-link" @onclick="PreviousPage">Previous</button>
+					</li>
+					<li class="page-item disabled">
+						<span class="page-link">Page @currentPage of @totalPages</span>
+					</li>
+					<li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+						<button class="page-link" @onclick="NextPage">Next</button>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
 
-    @if (isLoading && sessions.Count == 0)
-    {
-        <div class="text-center py-5">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <p class="mt-2">Loading CFP sessions...</p>
-        </div>
-    }
-    else if (sessions.Count == 0)
-    {
-        <div class="alert alert-info">
-            No CFP sessions found. Click "Refresh from API" to fetch data.
-        </div>
-    }
-    else
-    {
-        <div class="alert alert-info">
-            Showing <strong>@sessions.Count</strong> CFP session(s)
-        </div>
+	@if (isLoading && sessions.Count == 0)
+	{
+		<div class="text-center py-5">
+			<div class="spinner-border text-primary" role="status">
+				<span class="visually-hidden">Loading...</span>
+			</div>
+			<p class="mt-2">Loading CFP sessions...</p>
+		</div>
+	}
+	else if (sessions.Count == 0)
+	{
+		<div class="alert alert-info">
+			No CFP sessions found. Click "Refresh from API" to fetch data.
+		</div>
+	}
+	else
+	{
+		<div class="alert alert-info">
+			Showing <strong>@filteredSessions.Count</strong> CFP session(s)
+		</div>
 
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            @foreach (var session in pagedSessions)
-            {
-                <div class="col">
-                    <div class="card h-100 shadow-sm hover-shadow">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">
-                                <a href="/session/@session.Id" class="text-decoration-none">
-                                    @session.Name
-                                </a>
-                            </h5>
+		<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+			@foreach (var session in pagedSessions)
+			{
+				<div class="col">
+					<div class="card h-100 shadow-sm hover-shadow">
+						<div class="card-body d-flex flex-column">
+							<h5 class="card-title">
+								<a href="/session/@session.EventId" class="text-decoration-none">
+									@session.Name
+								</a>
+							</h5>
 
-                            <div class="mb-2">
-                                @if (session.IsOnline)
-                                {
-                                    <span class="badge bg-info me-1">Online</span>
-                                }
-                                @if (!session.IsOnline)
-                                {
-                                    <span class="badge bg-success me-1">In-Person</span>
-                                }
-                                @if (session.IsOnline && !string.IsNullOrEmpty(session.LocationFull))
-                                {
-                                    <span class="badge bg-warning me-1">Hybrid</span>
-                                }
-                                @if (!session.ExpensesConferenceFee)
-                                {
-                                    <span class="badge bg-primary me-1">Free</span>
-                                }
-                                @if (session.ExpensesTravel)
-                                {
-                                    <span class="badge bg-info me-1"><i class="bi bi-airplane"></i> Travel Covered</span>
-                                }
-                                @if (session.ExpensesAccommodation)
-                                {
-                                    <span class="badge bg-info me-1"><i class="bi bi-building"></i> Accommodation Covered</span>
-                                }
-                                @if (session.CfpStartDate.HasValue && session.CfpEndDate.HasValue && DateTime.Now >= session.CfpStartDate.Value && DateTime.Now <= session.CfpEndDate.Value)
-                                {
-                                    <span class="badge bg-success me-1">🔓 Open</span>
-                                }
-                                else
-                                {
-                                    <span class="badge bg-secondary me-1">🔒 Closed</span>
-                                }
-                            </div>
+							<div class="mb-2">
+								@if (session.IsOnline)
+								{
+									<span class="badge bg-info me-1">Online</span>
+								}
+								@if (!session.IsOnline)
+								{
+									<span class="badge bg-success me-1">In-Person</span>
+								}
+								@if (session.IsOnline && session.Location != null && !string.IsNullOrEmpty(session.Location.Full))
+								{
+									<span class="badge bg-warning me-1">Hybrid</span>
+								}
+								@if (session.ExpensesCovered != null && !session.ExpensesCovered.ConferenceFee)
+								{
+									<span class="badge bg-primary me-1">Free</span>
+								}
+								@if (session.ExpensesCovered?.Travel == true)
+								{
+									<span class="badge bg-info me-1"><i class="bi bi-airplane"></i> Travel Covered</span>
+								}
+								@if (session.ExpensesCovered?.Accommodation == true)
+								{
+									<span class="badge bg-info me-1"><i class="bi bi-building"></i> Accommodation Covered</span>
+								}
+								@if (session.CfpStartDate.HasValue && session.CfpEndDate.HasValue && DateTime.Now >= session.CfpStartDate.Value && DateTime.Now <= session.CfpEndDate.Value)
+								{
+									<span class="badge bg-success me-1">🔓 Open</span>
+								}
+								else
+								{
+									<span class="badge bg-secondary me-1">🔒 Closed</span>
+								}
+							</div>
 
-                            @if (!string.IsNullOrEmpty(session.LocationFull))
-                            {
-                                <p class="card-text mb-1">
-                                    <i class="bi bi-geo-alt"></i> @session.LocationFull
-                                </p>
-                            }
+							@if (session.Location != null && !string.IsNullOrEmpty(session.Location.Full))
+							{
+								<p class="card-text mb-1">
+									<i class="bi bi-geo-alt"></i> @session.Location.Full
+								</p>
+							}
 
-                            @if (session.CfpEndDate.HasValue)
-                            {
-                                <p class="card-text mb-1">
-                                    <i class="bi bi-calendar-event"></i>
-                                    <strong>CFP Closes:</strong> @session.CfpEndDate.Value.ToString("MMM dd, yyyy")
-                                </p>
-                            }
+							@if (session.CfpEndDate.HasValue)
+							{
+								<p class="card-text mb-1">
+									<i class="bi bi-calendar-event"></i>
+									<strong>CFP Closes:</strong> @session.CfpEndDate.Value.ToString("MMM dd, yyyy")
+								</p>
+							}
 
-                            @if (session.EventStartDate.HasValue)
-                            {
-                                <p class="card-text mb-2">
-                                    <i class="bi bi-calendar-check"></i>
-                                    <strong>Event:</strong> @session.EventStartDate.Value.ToString("MMM dd, yyyy")
-                                    @if (session.EventEndDate.HasValue && session.EventEndDate != session.EventStartDate)
-                                    {
-                                        <text> - @session.EventEndDate.Value.ToString("MMM dd, yyyy")</text>
-                                    }
-                                </p>
-                            }
+							@if (session.EventStartDate.HasValue)
+							{
+								<p class="card-text mb-2">
+									<i class="bi bi-calendar-check"></i>
+									<strong>Event:</strong> @session.EventStartDate.Value.ToString("MMM dd, yyyy")
+									@if (session.EventEndDate.HasValue && session.EventEndDate != session.EventStartDate)
+									{
+										<text> - @session.EventEndDate.Value.ToString("MMM dd, yyyy")</text>
+									}
+								</p>
+							}
 
-                            @if (!string.IsNullOrEmpty(session.Description))
-                            {
-                                <p class="card-text text-muted small flex-grow-1">
-                                    @(session.Description.Length > 150 ? session.Description.Substring(0, 150) + "..." : session.Description)
-                                </p>
-                            }
+							@if (!string.IsNullOrEmpty(session.Description))
+							{
+								<p class="card-text text-muted small flex-grow-1">
+									@(session.Description.Length > 150 ? session.Description.Substring(0, 150) + "..." : session.Description)
+								</p>
+							}
 
-                            <div class="mt-auto pt-2">
-                                <a href="/session/@session.Id" class="btn btn-sm btn-outline-primary me-2">View Details</a>
-                                @if (!string.IsNullOrEmpty(session.Website))
-                                {
-                                    <a href="@session.Website" target="_blank" class="btn btn-sm btn-outline-secondary">
-                                        Visit Site <i class="bi bi-box-arrow-up-right"></i>
-                                    </a>
-                                }
-                                @if (!string.IsNullOrEmpty(session.CfpLink))
-                                {
-                                    <a href="@session.CfpLink" target="_blank" class="btn btn-sm btn-outline-info">
-                                        View CFP <i class="bi bi-box-arrow-up-right"></i>
-                                    </a>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
-    }
+							<div class="mt-auto pt-2">
+								<a href="/session/@session.EventId" class="btn btn-sm btn-outline-primary me-2">View Details</a>
+								@if (!string.IsNullOrEmpty(session.Website))
+								{
+									<a href="@session.Website" target="_blank" class="btn btn-sm btn-outline-secondary">
+										Visit Site <i class="bi bi-box-arrow-up-right"></i>
+									</a>
+								}
+								@if (!string.IsNullOrEmpty(session.CfpLink))
+								{
+									<a href="@session.CfpLink" target="_blank" class="btn btn-sm btn-outline-info">
+										View CFP <i class="bi bi-box-arrow-up-right"></i>
+									</a>
+								}
+							</div>
+						</div>
+					</div>
+				</div>
+			}
+		</div>
+	}
 </div>
 
 <style>
-    .hover-shadow {
-        transition: box-shadow 0.3s ease-in-out;
-    }
-    .hover-shadow:hover {
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-    }
+	.hover-shadow {
+		transition: box-shadow 0.3s ease-in-out;
+	}
+	.hover-shadow:hover {
+		box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+	}
 </style>
 
 @code {
-    private List<CfpSessionFlat> sessions = new();
-    private List<CfpSessionFlat> pagedSessions => filteredSessions.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
-    private List<CfpSessionFlat> filteredSessions =>
-        sessions
-            .Where(s => string.IsNullOrEmpty(selectedCountry) || s.LocationCountry == selectedCountry)
-            .Where(s => !filterTravel || s.ExpensesTravel)
-            .Where(s => !filterAccommodation || s.ExpensesAccommodation)
-            .ToList();
-    private List<string> countries = new();
-    private string selectedCountry = "";
-    private int currentPage = 1;
-    private int pageSize = 20;
-    private int totalPages => (int)Math.Ceiling((double)filteredSessions.Count / pageSize);
-    private string searchTerm = "";
-    private bool openOnly = true;
-    private string sortBy = "cfpEndDate";
-    private bool ascending = true;
-    private bool isLoading = false;
-    private string? errorMessage;
-    private System.Threading.Timer? searchDebounceTimer;
-    private bool filterTravel = false;
-    private bool filterAccommodation = false;
+	private List<CfpSession> sessions = new();
+	private List<CfpSession> pagedSessions => filteredSessions.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+	private List<CfpSession> filteredSessions =>
+		sessions
+			.Where(s => string.IsNullOrEmpty(selectedCountry) || (s.Location?.Country == selectedCountry))
+			.Where(s => !filterTravel || (s.ExpensesCovered?.Travel == true))
+			.Where(s => !filterAccommodation || (s.ExpensesCovered?.Accommodation == true))
+			.ToList();
+	private List<string> countries = new();
+	private string selectedCountry = "";
+	private int currentPage = 1;
+	private int pageSize = 20;
+	private int totalPages => filteredSessions.Count == 0 ? 1 : (int)Math.Ceiling((double)filteredSessions.Count / pageSize);
+	private string searchTerm = "";
+	private bool openOnly = true;
+	private string sortBy = "cfpEndDate";
+	private bool ascending = true;
+	private bool isLoading = false;
+	private string? errorMessage;
+	private System.Threading.Timer? searchDebounceTimer;
+	private bool filterTravel = false;
+	private bool filterAccommodation = false;
 
-    protected override async Task OnInitializedAsync()
-    {
-        try
-        {
-            isLoading = true;
-            // Use cached sessions if available/valid
-            await AppState.EnsureInitializedAsync(DataService);
-            sessions = AppState.Sessions.ToList();
-            await LoadSessions();
-            await LoadCountries();
-        }
-        catch (Exception ex)
-        {
-            errorMessage = $"Initialization error: {ex.Message}";
-        }
-        finally
-        {
-            isLoading = false;
-        }
-    }
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			isLoading = true;
+			// Use cached sessions if available/valid
+			await AppState.EnsureInitializedAsync(DataService);
+			sessions = AppState.Sessions.ToList();
+			await LoadSessions();
+			await LoadCountries();
+		}
+		catch (Exception ex)
+		{
+			errorMessage = $"Initialization error: {ex.Message}";
+		}
+		finally
+		{
+			isLoading = false;
+		}
+	}
 
-    private async Task LoadSessions()
-    {
-        try
-        {
-            errorMessage = null;
-            // Use the existing search/filter logic via data service for consistency
-            var result = await DataService.SearchSessionsAsync(
-                string.IsNullOrWhiteSpace(searchTerm) ? null : searchTerm,
-                openOnly,
-                sortBy,
-                ascending
-            );
+	private async Task LoadSessions()
+	{
+		try
+		{
+			errorMessage = null;
+			// Use the existing search/filter logic via data service for consistency
+			var result = await DataService.SearchSessionsAsync(
+				string.IsNullOrWhiteSpace(searchTerm) ? null : searchTerm,
+				openOnly,
+				sortBy,
+				ascending
+			);
 
-            // Replace sessions only if data service had full list; keep cached base list
-            sessions = result;
-            currentPage = 1;
-        }
-        catch (Exception ex)
-        {
-            errorMessage = $"Error loading sessions: {ex.Message}";
-        }
-        finally
-        {
-            isLoading = false;
-        }
-    }
+			// Replace sessions only if data service had full list; keep cached base list
+			sessions = result;
+			currentPage = 1;
+		}
+		catch (Exception ex)
+		{
+			errorMessage = $"Error loading sessions: {ex.Message}";
+		}
+		finally
+		{
+			isLoading = false;
+		}
+	}
 
-    private async Task LoadCountries()
-    {
-        countries = sessions
-            .Select(s => s.LocationCountry)
-            .Where(c => !string.IsNullOrWhiteSpace(c))
-            .Distinct()
-            .OrderBy(c => c)
-            .ToList();
-    }
+	private async Task LoadCountries()
+	{
+		countries = sessions
+			.Where(s => s.Location != null && !string.IsNullOrEmpty(s.LocationString))
+			.Select(s => s.Location!.Country)
+			.Where(c => !string.IsNullOrWhiteSpace(c))
+			.Distinct()
+			.OrderBy(c => c)
+			.ToList();
+	}
 
-    private void PreviousPage()
-    {
-        if (currentPage > 1)
-        {
-            currentPage--;
-        }
-    }
+	private void PreviousPage()
+	{
+		if (currentPage > 1)
+		{
+			currentPage--;
+		}
+	}
 
-    private void NextPage()
-    {
-        if (currentPage < totalPages)
-        {
-            currentPage++;
-        }
-    }
+	private void NextPage()
+	{
+		if (currentPage < totalPages)
+		{
+			currentPage++;
+		}
+	}
 
-    private async Task RefreshData()
-    {
-        try
-        {
-            isLoading = true;
-			sessions = new List<CfpSessionFlat>();
-            countries = new List<string>();
+	private async Task RefreshData()
+	{
+		try
+		{
+			isLoading = true;
+			sessions = new List<CfpSession>();
+			countries = new List<string>();
 
-            errorMessage = null;
-            await AppState.ForceRefreshAsync(DataService);
-            sessions = AppState.Sessions.ToList();
-            await LoadSessions();
-            await LoadCountries();
-        }
-        catch (Exception ex)
-        {
-            errorMessage = $"Error refreshing data: {ex.Message}";
-        }
-        finally
-        {
-            isLoading = false;
-        }
-    }
+			errorMessage = null;
+			await AppState.ForceRefreshAsync(DataService);
+			sessions = AppState.Sessions.ToList();
+			await LoadSessions();
+			await LoadCountries();
+		}
+		catch (Exception ex)
+		{
+			errorMessage = $"Error refreshing data: {ex.Message}";
+		}
+		finally
+		{
+			isLoading = false;
+		}
+	}
 
-    private void OnSearchChanged()
-    {
-        searchDebounceTimer?.Dispose();
-        searchDebounceTimer = new System.Threading.Timer(async _ =>
-        {
-            await InvokeAsync(async () =>
-            {
-                await LoadSessions();
-                StateHasChanged();
-            });
-        }, null, 300, Timeout.Infinite);
-    }
+	private void OnSearchChanged()
+	{
+		searchDebounceTimer?.Dispose();
+		searchDebounceTimer = new System.Threading.Timer(async _ =>
+		{
+			await InvokeAsync(async () =>
+			{
+				await LoadSessions();
+				StateHasChanged();
+			});
+		}, null, 300, Timeout.Infinite);
+	}
 
-    public void Dispose()
-    {
-        searchDebounceTimer?.Dispose();
-    }
+	public void Dispose()
+	{
+		searchDebounceTimer?.Dispose();
+	}
 }
