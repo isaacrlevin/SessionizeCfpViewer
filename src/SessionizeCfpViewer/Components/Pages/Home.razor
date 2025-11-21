@@ -65,6 +65,25 @@
 							Ascending
 						</label>
 					</div>
+				</div>
+			</div>
+			<div class="row g-3 mt-1">
+				<div class="col-md-12">
+					<label class="form-label d-block">Filters</label>
+					<div class="form-check form-check-inline">
+						<input class="form-check-input" type="checkbox" id="onlineCheck"
+							   @bind="filterOnline" @bind:after="LoadSessions" />
+						<label class="form-check-label" for="onlineCheck">
+							Online Only
+						</label>
+					</div>
+					<div class="form-check form-check-inline">
+						<input class="form-check-input" type="checkbox" id="inPersonCheck"
+							   @bind="filterInPerson" @bind:after="LoadSessions" />
+						<label class="form-check-label" for="inPersonCheck">
+							In-Person Only
+						</label>
+					</div>
 					<div class="form-check form-check-inline">
 						<input class="form-check-input" type="checkbox" id="travelCheck"
 							   @bind="filterTravel" @bind:after="LoadSessions" />
@@ -158,6 +177,10 @@
 								{
 									<span class="badge bg-warning me-1">Hybrid</span>
 								}
+								@if (session.IsLikelyOnlineOnly)
+								{
+									<span class="badge bg-info me-1">Online Only</span>
+								}
 								@if (session.ExpensesCovered != null && !session.ExpensesCovered.ConferenceFee)
 								{
 									<span class="badge bg-primary me-1">Free</span>
@@ -184,6 +207,26 @@
 							{
 								<p class="card-text mb-1">
 									<i class="bi bi-geo-alt"></i> @session.Location.Full
+								</p>
+							}
+							else if (session.IsLikelyOnlineOnly)
+							{
+								<p class="card-text mb-1">
+									<i class="bi bi-geo-alt"></i> 
+									<span class="text-muted">
+										@if (session.Location == null)
+										{
+											<text>Online Only (No Location)</text>
+										}
+										else if (session.EventStartDate.HasValue && session.EventEndDate.HasValue && (session.EventEndDate.Value - session.EventStartDate.Value).Days > 10)
+										{
+											<text>Online Only (Extended Duration)</text>
+										}
+										else
+										{
+											<text>Online Only</text>
+										}
+									</span>
 								</p>
 							}
 
@@ -252,6 +295,8 @@
 	private List<CfpSession> filteredSessions =>
 		sessions
 			.Where(s => string.IsNullOrEmpty(selectedCountry) || (s.Location?.Country == selectedCountry))
+			.Where(s => !filterOnline || s.IsOnline || s.IsLikelyOnlineOnly)
+			.Where(s => !filterInPerson || (!s.IsOnline && !s.IsLikelyOnlineOnly))
 			.Where(s => !filterTravel || (s.ExpensesCovered?.Travel == true))
 			.Where(s => !filterAccommodation || (s.ExpensesCovered?.Accommodation == true))
 			.ToList();
@@ -267,6 +312,8 @@
 	private bool isLoading = false;
 	private string? errorMessage;
 	private System.Threading.Timer? searchDebounceTimer;
+	private bool filterOnline = false;
+	private bool filterInPerson = false;
 	private bool filterTravel = false;
 	private bool filterAccommodation = false;
 

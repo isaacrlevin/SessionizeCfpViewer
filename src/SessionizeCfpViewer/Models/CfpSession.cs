@@ -73,6 +73,26 @@ public class CfpSession
     public bool IsHybrid => IsOnline && Location != null && !string.IsNullOrEmpty(Location.Full);
     public bool IsFree => ExpensesCovered != null && ExpensesCovered.ConferenceFee;
 
+    // Computed property to determine if conference is likely online-only
+    // Assumes online-only if: 1) Location is null, OR 2) Event duration > 10 days
+    public bool IsLikelyOnlineOnly
+    {
+        get
+        {
+            if (Location == null)
+                return true;
+
+            if (EventStartDate.HasValue && EventEndDate.HasValue)
+            {
+                var duration = (EventEndDate.Value - EventStartDate.Value).Days;
+                if (duration > 10)
+                    return true;
+            }
+
+            return false;
+        }
+    }
+
     // Convenience property for Razor and search usage
     public string? LocationString => Location?.Full;
 }

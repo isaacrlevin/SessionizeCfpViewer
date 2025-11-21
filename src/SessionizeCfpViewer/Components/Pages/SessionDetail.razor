@@ -25,7 +25,8 @@
     else
     {
         <div class="mb-3">
-            <a href="/" class="btn btn-outline-secondary">
+            <a href="/"
+               class="btn btn-outline-secondary">
                 <i class="bi bi-arrow-left"></i> Back to List
             </a>
         </div>
@@ -46,11 +47,28 @@
                             {
                                 <span class="badge bg-success fs-6">In-Person</span>
                             }
-                            @if (session.IsOnline && !string.IsNullOrEmpty(session.Location.Full))
+                            @if (session.IsOnline && session.Location != null && !string.IsNullOrEmpty(session.Location.Full))
                             {
                                 <span class="badge bg-warning fs-6">Hybrid</span>
                             }
-                            @if (!session.ExpensesCovered.ConferenceFee)
+                            @if (session.IsLikelyOnlineOnly)
+                            {
+                                <span class="badge bg-info fs-6">
+                                    @if (session.Location == null)
+                                    {
+                                        <text>Online Only (No Location)</text>
+                                    }
+                                    else if (session.EventStartDate.HasValue && session.EventEndDate.HasValue && (session.EventEndDate.Value - session.EventStartDate.Value).Days > 10)
+                                    {
+                                        <text>Online Only (Extended Duration)</text>
+                                    }
+                                    else
+                                    {
+                                        <text>Online Only</text>
+                                    }
+                                </span>
+                            }
+                            @if (session.ExpensesCovered != null && !session.ExpensesCovered.ConferenceFee)
                             {
                                 <span class="badge bg-primary fs-6">Free</span>
                             }
@@ -62,11 +80,11 @@
                             {
                                 <span class="badge bg-danger fs-6">🔒 CFP Closed</span>
                             }
-                            @if (session.ExpensesCovered.Travel)
+                            @if (session.ExpensesCovered?.Travel == true)
                             {
                                 <span class="badge bg-info fs-6"><i class="bi bi-airplane"></i> Travel Covered</span>
                             }
-                            @if (session.ExpensesCovered.Accommodation)
+                            @if (session.ExpensesCovered?.Accommodation == true)
                             {
                                 <span class="badge bg-info fs-6"><i class="bi bi-building"></i> Accommodation Covered</span>
                             }
@@ -87,28 +105,49 @@
                         <h5>Location Details</h5>
                         <table class="table table-sm">
                             <tbody>
-                                @if (!string.IsNullOrEmpty(session.Location.Full))
+                                @if (session.IsLikelyOnlineOnly)
                                 {
                                     <tr>
                                         <th style="width: 40%;">Location:</th>
-                                        <td>@session.Location.Full</td>
+                                        <td>
+                                            <span class="badge bg-info">Online Only</span>
+                                            @if (session.Location == null)
+                                            {
+                                                <div class="text-muted small mt-1">No physical location specified</div>
+                                            }
+                                            else if (session.EventStartDate.HasValue && session.EventEndDate.HasValue && (session.EventEndDate.Value - session.EventStartDate.Value).Days > 10)
+                                            {
+                                                var duration = (session.EventEndDate.Value - session.EventStartDate.Value).Days;
+                                                <div class="text-muted small mt-1">Extended duration (@duration days) - Assumed online-only</div>
+                                            }
+                                        </td>
                                     </tr>
                                 }
-                                @if (!string.IsNullOrEmpty(session.City))
+                                else if (session.Location != null)
                                 {
-                                    <tr>
-                                        <th>City:</th>
-                                        <td>@session.City</td>
-                                    </tr>
+                                    @if (!string.IsNullOrEmpty(session.Location.Full))
+                                    {
+                                        <tr>
+                                            <th style="width: 40%;">Location:</th>
+                                            <td>@session.Location.Full</td>
+                                        </tr>
+                                    }
+                                    @if (!string.IsNullOrEmpty(session.City))
+                                    {
+                                        <tr>
+                                            <th>City:</th>
+                                            <td>@session.City</td>
+                                        </tr>
+                                    }
+                                    @if (!string.IsNullOrEmpty(session.Country))
+                                    {
+                                        <tr>
+                                            <th>Country:</th>
+                                            <td>@session.Country @(!string.IsNullOrEmpty(session.CountryCode) ? $"({session.CountryCode})" : "")</td>
+                                        </tr>
+                                    }
                                 }
-                                @if (!string.IsNullOrEmpty(session.Country))
-                                {
-                                    <tr>
-                                        <th>Country:</th>
-                                        <td>@session.Country @(!string.IsNullOrEmpty(session.CountryCode) ? $"({session.CountryCode})" : "")</td>
-                                    </tr>
-                                }
-                                @if (!string.IsNullOrEmpty(session.Timezone.Iana))
+                                @if (session.Timezone != null && !string.IsNullOrEmpty(session.Timezone.Iana))
                                 {
                                     <tr>
                                         <th>Timezone:</th>
